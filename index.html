@@ -46,6 +46,93 @@
             margin-bottom: 20px;
         }
         
+        .live-weather-section {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 30px 0;
+            backdrop-filter: blur(10px);
+            text-align: center;
+        }
+        
+        .live-weather-title {
+            color: #fff;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+        
+        .weather-input-group {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .city-input {
+            padding: 15px 20px;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            min-width: 250px;
+            outline: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .weather-btn {
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 25px;
+            background: linear-gradient(45deg, #ff6b6b, #ffd93d);
+            color: #333;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        .weather-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+        
+        .weather-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .live-result {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            display: none;
+        }
+        
+        .live-result.show {
+            display: block;
+        }
+        
+        .live-weather-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .live-weather-item {
+            background: rgba(255, 255, 255, 0.3);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
         .audio-section {
             text-align: center;
             margin: 30px 0;
@@ -153,6 +240,20 @@
             font-weight: bold;
         }
         
+        .error-message {
+            background: rgba(255, 100, 100, 0.8);
+            color: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            display: none;
+        }
+        
+        .loading {
+            color: #fff;
+            font-style: italic;
+        }
+        
         @media (max-width: 768px) {
             .cities-grid {
                 grid-template-columns: 1fr;
@@ -165,6 +266,15 @@
             .city-card {
                 margin: 0 10px;
             }
+            
+            .weather-input-group {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .city-input {
+                min-width: 200px;
+            }
         }
     </style>
 </head>
@@ -175,6 +285,27 @@
             <p class="subtitle">Live from Five Fantastic Indian Cities!</p>
             <p style="color: #f0f0f0;">May 25, 2025 - Where Every Forecast is an Adventure!</p>
         </header>
+
+        <!-- Live Weather Check Section -->
+        <div class="live-weather-section">
+            <h2 class="live-weather-title">🔴 Live Weather Check 🔴</h2>
+            <p style="color: #f0f0f0; margin-bottom: 20px;">Get real-time weather for any city around the world!</p>
+            
+            <div class="weather-input-group">
+                <input type="text" id="cityInput" class="city-input" placeholder="Enter city name (e.g., Mumbai, New York, London)" />
+                <button onclick="checkLiveWeather()" class="weather-btn" id="weatherBtn">
+                    🌡️ Check Weather
+                </button>
+            </div>
+            
+            <div id="liveResult" class="live-result">
+                <!-- Live weather results will appear here -->
+            </div>
+            
+            <div id="errorMessage" class="error-message">
+                <!-- Error messages will appear here -->
+            </div>
+        </div>
 
         <div class="audio-section">
             <div class="audio-container">
@@ -344,7 +475,133 @@
             <p style="margin-top: 15px; opacity: 0.8;">
                 Data updated: May 25, 2025 | Created with ❤️ by Bhindi Agent
             </p>
+            <p style="margin-top: 10px; opacity: 0.7; font-size: 0.9rem;">
+                Live weather powered by Open-Meteo API
+            </p>
         </footer>
     </div>
+
+    <script>
+        // Add Enter key support for input field
+        document.getElementById('cityInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkLiveWeather();
+            }
+        });
+
+        async function checkLiveWeather() {
+            const cityInput = document.getElementById('cityInput');
+            const weatherBtn = document.getElementById('weatherBtn');
+            const liveResult = document.getElementById('liveResult');
+            const errorMessage = document.getElementById('errorMessage');
+            
+            const city = cityInput.value.trim();
+            
+            if (!city) {
+                showError('Please enter a city name!');
+                return;
+            }
+            
+            // Show loading state
+            weatherBtn.innerHTML = '⏳ Loading...';
+            weatherBtn.disabled = true;
+            liveResult.classList.remove('show');
+            errorMessage.style.display = 'none';
+            
+            try {
+                // First, get coordinates for the city using geocoding
+                const geoResponse = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=1&language=en&format=json`);
+                const geoData = await geoResponse.json();
+                
+                if (!geoData.results || geoData.results.length === 0) {
+                    throw new Error('City not found. Please check the spelling and try again.');
+                }
+                
+                const location = geoData.results[0];
+                
+                // Get weather data using coordinates
+                const weatherResponse = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${location.latitude}&longitude=${location.longitude}&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code&timezone=auto`);
+                const weatherData = await weatherResponse.json();
+                
+                if (!weatherData.current) {
+                    throw new Error('Weather data not available for this location.');
+                }
+                
+                // Weather code descriptions
+                const weatherCodes = {
+                    0: "Clear sky",
+                    1: "Mainly clear",
+                    2: "Partly cloudy",
+                    3: "Overcast",
+                    45: "Fog",
+                    48: "Depositing rime fog",
+                    51: "Light drizzle",
+                    53: "Moderate drizzle",
+                    55: "Dense drizzle",
+                    61: "Slight rain",
+                    63: "Moderate rain",
+                    65: "Heavy rain",
+                    71: "Slight snow fall",
+                    73: "Moderate snow fall",
+                    75: "Heavy snow fall",
+                    77: "Snow grains",
+                    80: "Slight rain showers",
+                    81: "Moderate rain showers",
+                    82: "Violent rain showers",
+                    85: "Slight snow showers",
+                    86: "Heavy snow showers",
+                    95: "Thunderstorm",
+                    96: "Thunderstorm with slight hail",
+                    99: "Thunderstorm with heavy hail"
+                };
+                
+                const current = weatherData.current;
+                const weatherDescription = weatherCodes[current.weather_code] || "Unknown";
+                
+                // Display results
+                liveResult.innerHTML = `
+                    <h3 style="margin-bottom: 20px; color: #fff;">
+                        🌍 ${location.name}${location.country ? `, ${location.country}` : ''}
+                    </h3>
+                    <div class="live-weather-grid">
+                        <div class="live-weather-item">
+                            <div class="weather-value">${Math.round(current.temperature_2m)}°C</div>
+                            <div class="weather-label">Temperature</div>
+                        </div>
+                        <div class="live-weather-item">
+                            <div class="weather-value">${current.relative_humidity_2m}%</div>
+                            <div class="weather-label">Humidity</div>
+                        </div>
+                        <div class="live-weather-item">
+                            <div class="weather-value">${Math.round(current.wind_speed_10m * 10) / 10} km/h</div>
+                            <div class="weather-label">Wind Speed</div>
+                        </div>
+                        <div class="live-weather-item">
+                            <div class="weather-value" style="font-size: 1rem;">${weatherDescription}</div>
+                            <div class="weather-label">Conditions</div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 20px; padding: 15px; background: rgba(255, 255, 255, 0.2); border-radius: 10px; font-style: italic;">
+                        Last updated: ${new Date(current.time).toLocaleString()}
+                    </div>
+                `;
+                
+                liveResult.classList.add('show');
+                
+            } catch (error) {
+                showError(error.message || 'Failed to fetch weather data. Please try again.');
+            } finally {
+                // Reset button
+                weatherBtn.innerHTML = '🌡️ Check Weather';
+                weatherBtn.disabled = false;
+            }
+        }
+        
+        function showError(message) {
+            const errorMessage = document.getElementById('errorMessage');
+            errorMessage.textContent = '⚠️ ' + message;
+            errorMessage.style.display = 'block';
+        }
+    </script>
 </body>
 </html>
