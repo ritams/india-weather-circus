@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>India's Weather Circus - Five Cities Weather Report</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        
+        h1 {
+            color: #fff;
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            color: #f0f0f0;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+        
+        .audio-section {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .audio-container {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            display: inline-block;
+        }
+        
+        .cities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .city-card {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .city-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+        
+        .city-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+        
+        .city-info {
+            padding: 25px;
+            color: #fff;
+        }
+        
+        .city-name {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #fff;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+        
+        .weather-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .weather-item {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .weather-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+            display: block;
+        }
+        
+        .weather-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .description {
+            background: rgba(255, 255, 255, 0.25);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            text-align: center;
+            font-style: italic;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            color: #fff;
+        }
+        
+        .fun-fact {
+            background: linear-gradient(45deg, #ff6b6b, #ffd93d);
+            color: #333;
+            padding: 15px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        @media (max-width: 768px) {
+            .cities-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .city-card {
+                margin: 0 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌦️ India's Weather Circus 🎪</h1>
+            <p class="subtitle">Live from Five Fantastic Indian Cities!</p>
+            <p style="color: #f0f0f0;">May 25, 2025 - Where Every Forecast is an Adventure!</p>
+        </header>
+
+        <div class="audio-section">
+            <div class="audio-container">
+                <h3 style="color: #fff; margin-bottom: 15px;">🎵 Listen to the Quirky Weather Report 🎵</h3>
+                <audio controls style="width: 100%; max-width: 400px;">
+                    <source src="https://v3.fal.media/files/panda/O9oUmu6pg-7eFMgyj-HC9_2d131870-cc0c-4367-a1d8-0174a35c7b0d.mp3" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
+            </div>
+        </div>
+
+        <div class="cities-grid">
+            <div class="city-card">
+                <img src="https://v3.fal.media/files/tiger/ynK4x13DEmN0bw-xEw3Ll_image.webp" alt="Mumbai Gateway of India in drizzle" class="city-image">
+                <div class="city-info">
+                    <h3 class="city-name">🌧️ Mumbai</h3>
+                    <p><strong>Heritage:</strong> Gateway of India</p>
+                    <div class="weather-details">
+                        <div class="weather-item">
+                            <span class="weather-value">30°C</span>
+                            <span class="weather-label">Temperature</span>
+                        </div>
+                        <div class="weather-item">
+                            <span class="weather-value">79%</span>
+                            <span class="weather-label">Humidity</span>
+                        </div>
+                        <div class="weather-item">
+                            <span class="weather-value">4.6 m/s</span>
+                            <span class="weather-label">Wind Speed</span>
+                        </div>
+                        <div class="weather-item">
+                            <span class="weather-value">75%</span>
+                            <span class="weather-label">Cloudiness</span>
+                        </div>
+                    </div>
+                    <div class="description">
+                        Light intensity drizzle - Perfect umbrella twirling weather!
+                    </div>
+                </div>
+            </div>
+
+            <div class="city-card">
+                <img src="https://v3.fal.media/files/lion/qXySPcG01A39AoWl_RnT2_image.webp" alt="Delhi Red Fort in haze" class="city-image">
+                <div class="city-info">
+                    <h3 class="city-name">🌫️ Delhi</h3>
+                    <p><strong>Heritage:</strong> Red Fort (Lal Qila)</p>
+                    <div class="weather-details">
+                        <div class="weather-item">
+                            <span class="weather-value">31°C</span>
+                            <span class="weather-label">Temperature</span>
+                        </div>
+                        <div class="weather-item">
+                            <span class="weather-value">58%</span>
+                            <span class="weather-label">Humidity</span>
+                        </div>
+                        <div class="weather-item">
+                            <span class="weather-value">3.6 m/s</span>
+                            <span class="weather-label">Wind Speed</span>
+                        </div>
+                        <div class="weather-item">
+                            <span class="weather-value">75%</span>
+                            <span class="weather-label">Cloudiness</span>
+                        </div>
+                    </div>
+                    <div class="description">
+                        Haze - Even Mughal emperors would need GPS today!
+                    </div>
+                </div>
+            </div>
+
+            <div class="city-card">
+                <img src="https://v3.fal.media/files/kangaroo/3zp3OrpVPs7dy-SIB0bG2_image.webp" alt="Bangalore Mysore Palace under clouds" class="city-image">
+                <div class="city-info">
+                    <h3 class="city-name">☁️ Bangalore</h3>
+                    <p><strong>Heritage:</strong> Mysore Palace</p>
+                    <div class="weather-details">
+                        <div class="weather-item">
+                            <span class="weather-value">26°C</span>
+                            <span class="weather-label">Temperature</span>
+                        </div>
+                        <div class="weather-item">
+                            <span class="weather-value">77%</span>
+                            <span class="weather-label">Humidity</span>
+                        </div>
+                        <div class="weather-item">
+                            <span class="weather-value">7.3 m/s</span>
+                            <span class="weather-label">Wind Speed</span>
+                        </div>
+                        <div class="weather-item">
+                            <span class="weather-value">100%</span>
+                            <span class="weather-label">Cloudiness</span>
+                        </div>
+                    </div>
+                    <div class="description">
+                        Overcast clouds - Nature's own air conditioning system!
+                    </div>
+                </div>
+            </div>
+
+            <div class="city-card">
+                <img src="https://v3.fal.media/files/koala/37ePNaRmY-fq5wp0mkAfN_image.webp" alt="Kolkata Victoria Memorial in thunderstorm" class="city-image">
+                <div class="city-info">
+                    <h3 class="city-name">⚡ Kolkata</h3>
+                    <p><strong>Heritage:</strong> Victoria Memorial</p>
+                    <div class="weather-details">
+                        <div class="weather-item">
+                            <span class="weather-value">30°C</span>
+                            <span class="weather-label">Temperature</span>
+                        </div>
+                        <div class="weather-item">
+                            <span class="weather-value">70%</span>
+                            <span class="weather-label">Humidity</span>
+                        </div>
+                        <div class="weather-item">
+                            <span class="weather-value">4.1 m/s</span>
+                            <span class="weather-label">Wind Speed</span>
+                        </div>
+                        <div class="weather-item">
+                            <span class="weather-value">75%</span>
+                            <span class="weather-label">Cloudiness</span>
+                        </div>
+                    </div>
+                    <div class="description">
+                        Thunderstorm - Thor's own Bollywood production!
+                    </div>
+                </div>
+            </div>
+
+            <div class="city-card">
+                <img src="https://v3.fal.media/files/tiger/plygj5cLQUMMEb6falXx-_image.webp" alt="Jaipur Hawa Mahal in extreme heat" class="city-image">
+                <div class="city-info">
+                    <h3 class="city-name">🔥 Jaipur</h3>
+                    <p><strong>Heritage:</strong> Hawa Mahal (Palace of Winds)</p>
+                    <div class="weather-details">
+                        <div class="weather-item">
+                            <span class="weather-value">38°C</span>
+                            <span class="weather-label">Temperature</span>
+                        </div>
+                        <div class="weather-item">
+                            <span class="weather-value">28%</span>
+                            <span class="weather-label">Humidity</span>
+                        </div>
+                        <div class="weather-item">
+                            <span class="weather-value">1.0 m/s</span>
+                            <span class="weather-label">Wind Speed</span>
+                        </div>
+                        <div class="weather-item">
+                            <span class="weather-value">57%</span>
+                            <span class="weather-label">Cloudiness</span>
+                        </div>
+                    </div>
+                    <div class="description">
+                        Haze - So hot, even desert camels want ice cream!
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="fun-fact">
+            🎪 Fun Fact: Today's weather showcase spans from drizzling Mumbai to sizzling Jaipur - 
+            that's an 8°C temperature difference across incredible India! 🌡️
+        </div>
+
+        <footer>
+            <h3>🎭 That's Your Weather Circus! 🎭</h3>
+            <p>Where every day is an adventure and every forecast is a surprise!</p>
+            <p style="margin-top: 15px; opacity: 0.8;">
+                Data updated: May 25, 2025 | Created with ❤️ by Bhindi Agent
+            </p>
+        </footer>
+    </div>
+</body>
+</html>
